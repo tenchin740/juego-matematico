@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Juego Matemático</title>
-    <!-- Nota: para GitHub Pages, mantén carpetas im/ y au/ con estos mismos nombres y mayúsculas/minúsculas. --><style>
+    <!-- Nota: para GitHub Pages, mantén carpetas im/ y au/ con estos mismos nombres y mayúsculas/minúsculas. -->
+    <!-- Limpio: se eliminó script inyectado por Kaspersky y se evitó precargar video al inicio. --><style>
         body { 
             font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 20px;
             background-image: url('im/fondo.png');
@@ -180,6 +181,24 @@
         @keyframes brilloContinuo { 0% { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.7)); } 50% { filter: drop-shadow(0 0 50px rgba(255, 69, 0, 1)); } 100% { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.7)); } }
     
 
+        /* BOTÓN TEMPORAL DE PRUEBA: eliminar cuando el juego esté listo */
+        #btn-test-final {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            z-index: 150;
+            background: #ff5722;
+            color: white;
+            border: 3px solid white;
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+        }
+        #btn-test-final:hover { background: #e64a19; transform: scale(1.04); }
+
         /* =========================================================
            AJUSTES RESPONSIVE PARA GITHUB PAGES / CELULAR
            - Se adapta a pantallas pequeñas en vertical y horizontal.
@@ -214,6 +233,7 @@
             .login-box { width: min(92vw, 400px); padding: 22px; }
             #historial-login-box { width: min(92vw, 380px); max-height: 160px; }
             #modal { width: min(280px, 80vw); }
+            #btn-test-final { left: 10px; bottom: 10px; padding: 8px 10px; font-size: 12px; }
         }
 
         /* Celular vertical: preguntas arriba y respuestas abajo */
@@ -248,6 +268,7 @@
             .login-box h2 { font-size: 22px; margin-bottom: 10px; }
             .panel-audio { padding: 8px; margin-bottom: 10px; }
             #historial-login-box { display: none; }
+            #btn-test-final { right: 6px; left: auto; bottom: 6px; padding: 6px 8px; font-size: 11px; }
             #imagen-fin-juego { width: 78vw; max-width: 560px; }
         }
 
@@ -293,6 +314,7 @@
     <img id="reiniciar" src="im/Reiniciar.png" onclick="ejecutarReset()" title="Reiniciar Partida">
     <img id="cerrar" src="im/cerrar.png" onclick="cerrarJuego()" title="Cerrar Juego">
     <img id="historial" src="im/historial.png" onclick="resetearHistorial()" title="Borrar Historial">
+    <button id="btn-test-final" onclick="modoPruebaFinal()" title="Temporal: completa el juego para revisar el final">🧪 TEST FINAL</button>
 
     <img class="titulo-imagen" src="im/titulo.png" alt="Ejercicios Matemáticos">
 
@@ -628,6 +650,67 @@
             video.onended = function() { pantalla.style.display = 'none'; location.reload(); };
         }
 
+
+        // Convierte duraciones tipo "1m 23s" a segundos para poder ordenar el historial.
+        function obtenerSegundosDuracion(duracion) {
+            if (!duracion) return Number.MAX_SAFE_INTEGER;
+            const texto = String(duracion);
+            const min = texto.match(/(\d+)\s*m/);
+            const seg = texto.match(/(\d+)\s*s/);
+            return (min ? parseInt(min[1], 10) * 60 : 0) + (seg ? parseInt(seg[1], 10) : 0);
+        }
+
+        // Orden ideal del historial:
+        // 1) Mayor puntaje primero.
+        // 2) Si empatan en puntaje, gana quien hizo menor tiempo.
+        // 3) Si también empatan, queda primero la partida más reciente.
+        function ordenarHistorial(historial) {
+            return historial.sort((a, b) => {
+                const puntosA = Number(a.puntos) || 0;
+                const puntosB = Number(b.puntos) || 0;
+                const tiempoA = Number.isFinite(Number(a.segundos)) ? Number(a.segundos) : obtenerSegundosDuracion(a.duracion);
+                const tiempoB = Number.isFinite(Number(b.segundos)) ? Number(b.segundos) : obtenerSegundosDuracion(b.duracion);
+                const fechaA = Number(a.timestamp) || 0;
+                const fechaB = Number(b.timestamp) || 0;
+                return (puntosB - puntosA) || (tiempoA - tiempoB) || (fechaB - fechaA);
+            });
+        }
+
+        // BOTÓN TEMPORAL: completa la partida para probar video final, imagen fin_juego e historial.
+        // Eliminar esta función y el botón #btn-test-final cuando el juego esté terminado.
+        function modoPruebaFinal() {
+            if (!confirm("Modo prueba: se completará la partida automáticamente para revisar el final. ¿Continuar?")) return;
+
+            if (!nombreUsuario) {
+                const inputNombre = document.getElementById('nombre-jugador');
+                nombreUsuario = (inputNombre && inputNombre.value.trim()) ? inputNombre.value.trim() : "Prueba";
+                document.getElementById('jugador-actual').innerText = `Jugador: ${nombreUsuario}`;
+            }
+
+            document.getElementById('pantalla-login').style.display = 'none';
+
+            if (!tiempoInicio) {
+                // Deja al menos 1 segundo de duración para que el historial no quede en 0s.
+                tiempoInicio = new Date(Date.now() - 1000);
+            }
+
+            totalPuntos = pares.reduce((total, pareja) => total + (pareja.bonus ? 30 : 10), 0);
+            aciertosContador = totalParejas;
+            document.getElementById('puntos').innerText = totalPuntos;
+
+            document.querySelectorAll('.btn-q, .btn-a').forEach(btn => {
+                btn.style.visibility = 'hidden';
+                btn.classList.remove('selected');
+            });
+
+            seleccionadoId = null;
+            botonPreguntaActivo = null;
+            estaArrastrando = false;
+            if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            setTimeout(activarPantallaVictoria, 300);
+        }
+
         function guardarEnHistorial(nombre, puntos, duracion) {
             let historial = JSON.parse(localStorage.getItem('historialMatematico')) || [];
             const nuevaPartida = { nombre: nombre, puntos: puntos, duracion: duracion, fecha: new Date().toLocaleDateString() };
@@ -639,14 +722,15 @@
         function actualizarPantallaHistorial() {
             const lista = document.getElementById('lista-historial-login');
             let historial = JSON.parse(localStorage.getItem('historialMatematico')) || [];
-            
+            historial = ordenarHistorial(historial);
+            localStorage.setItem('historialMatematico', JSON.stringify(historial));
+              
             if (historial.length === 0) {
                 lista.innerHTML = '<div style="color:#aaa; text-align:center; padding: 10px;">No hay partidas registradas aún</div>'; return;
             }
-
             lista.innerHTML = "";
-            historial.forEach(partida => {
-                lista.innerHTML += `<div class="item-historial"><strong>${partida.nombre}</strong><br>🎯 Puntos: ${partida.puntos} | ⏱️ ${partida.duracion} <br><span style="font-size:11px; color:#aaa;">Fecha: ${partida.fecha}</span></div>`;
+            historial.forEach((partida, index) => {
+                lista.innerHTML += `<div class="item-historial"><strong>#${index + 1} - ${partida.nombre}</strong><br>🎯 Puntos: ${partida.puntos} | ⏱️ ${partida.duracion} <br><span style="font-size:11px; color:#aaa;">Fecha: ${partida.fecha}</span></div>`;
             });
         }
         function resetearHistorial() {
