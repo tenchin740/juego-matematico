@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
-    <title>Juego Matemático - V31 Total Acumulado</title>
+    <title>Juego Matemático - V32 Mobile Optimizado</title>
     <link rel="icon" type="image/png" href="im/titulo.png">
     <!-- V24 - Vista previa bonita para WhatsApp / redes sociales -->
     <meta name="description" content="Practica raíces, potencias y desafíos matemáticos por niveles.">
@@ -312,7 +312,7 @@
 
     
 
-        /* V31 - Dos niveles, total acumulado y penalizacion de tiempo */
+        /* V32 - Mobile optimizado, lotes de 10, total acumulado */
         #estado-ranking-global { text-align:center; font-size:11px; color:#aaa; margin-top:6px; }
         #estado-ranking-global.online { color:#6dff8f; }
         #estado-ranking-global.offline { color:#ffcf66; }
@@ -362,7 +362,7 @@
 
 
         /* =========================================================
-           V31 - TOTAL ACUMULADO + PENALIZACION DE TIEMPO / BASE V30
+           V32 - MOBILE OPTIMIZADO + LOTES DE 10 / BASE V31
            Conserva Nivel 1 V24 original y agrega Nivel 2 V26.
            ========================================================= */
         .selector-nivel-v29{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px 0}.selector-nivel-v29 button{border:2px solid rgba(255,255,255,.35);border-radius:14px;padding:10px 8px;cursor:pointer;background:rgba(255,255,255,.10);color:white;font-weight:900;transition:.18s ease;min-height:74px}.selector-nivel-v29 button span{display:block;font-size:17px}.selector-nivel-v29 button small{display:block;font-size:11px;color:#ddd;margin-top:4px;line-height:1.15}.selector-nivel-v29 button.activo{background:#ffd766;color:#163d63;border-color:white;box-shadow:0 0 18px rgba(255,215,0,.62);transform:scale(1.03)}.selector-nivel-v29 button.activo small{color:#5d4037}.selector-nivel-v29 button.bloqueado{opacity:.55;filter:grayscale(.25);cursor:not-allowed}.estado-progreso-niveles-v29{color:#ffd766;font-size:12px;font-weight:800;min-height:18px;margin-bottom:12px}.titulo-nivel2{display:none}
@@ -407,6 +407,167 @@
            V31 - DETALLES DE TOTAL ACUMULADO Y PENALIZACION
            ========================================================= */
         .detalle-total-v31{color:#ffd766;font-weight:900;font-size:14px;margin-top:8px;line-height:1.35}.detalle-total-v31 span{color:#6dff8f}.penalizacion-v31{color:#ffcf66;font-size:13px;font-weight:800;margin-top:4px}.puntos-ranking-v24 small,.puntos-ranking small{display:block;color:#ddd;font-size:12px;font-weight:700;margin-top:2px}
+
+
+        /* =========================================================
+           V32 - OPTIMIZACION CELULAR NIVEL 2
+           - Numeros mas grandes.
+           - Puntaje mas pequeno y hacia la derecha.
+           - Tablero debajo de configuracion y puntaje.
+           - Nivel 2 se juega en lotes de 10 + 10.
+           ========================================================= */
+        body.nivel-2 #panel-lateral {
+            top: 8px !important;
+            right: max(6px, env(safe-area-inset-right)) !important;
+            width: min(215px, 34vw) !important;
+            z-index: 245 !important;
+        }
+        body.nivel-2 #marcador-puntos {
+            padding: 7px 12px !important;
+            font-size: clamp(16px, 2.1vw, 19px) !important;
+            line-height: 1.15 !important;
+            border-radius: 14px !important;
+            min-width: 0 !important;
+        }
+        body.nivel-2 #jugador-actual {
+            font-size: clamp(11px, 1.5vw, 13px) !important;
+            margin-bottom: 3px !important;
+        }
+        body.nivel-2 .btn-q,
+        body.nivel-2 .btn-a {
+            font-size: clamp(20px, 2.25vw, 26px) !important;
+        }
+        body.nivel-2 .btn-q sup,
+        body.nivel-2 .btn-a sup {
+            font-size: .62em !important;
+            line-height: 0 !important;
+        }
+        @media (max-width: 700px) and (orientation: portrait) {
+            body.nivel-2 {
+                background-position: center 84px, center center !important;
+                background-size: cover, cover !important;
+                overflow: auto !important;
+                padding-top: 0 !important;
+            }
+            body.nivel-2 #btn-menu-controles {
+                top: calc(8px + env(safe-area-inset-top)) !important;
+                left: 8px !important;
+                width: 52px !important;
+                height: 52px !important;
+                font-size: 27px !important;
+            }
+            body.nivel-2 #panel-lateral {
+                top: calc(8px + env(safe-area-inset-top)) !important;
+                right: 6px !important;
+                width: min(205px, 58vw) !important;
+            }
+            body.nivel-2 #marcador-puntos {
+                padding: 7px 11px !important;
+                font-size: 20px !important;
+                border-radius: 15px !important;
+            }
+            body.nivel-2 #jugador-actual {
+                font-size: 13px !important;
+                margin-bottom: 2px !important;
+            }
+            body.nivel-2 .titulo-nivel2 {
+                display: none !important;
+            }
+            body.nivel-2 .wrapper {
+                margin-top: calc(104px + env(safe-area-inset-top)) !important;
+                width: calc(100vw - 16px) !important;
+                max-width: none !important;
+                padding: 8px !important;
+                background: rgba(255,255,255,.52) !important;
+                border-radius: 16px !important;
+            }
+            body.nivel-2 .container {
+                gap: 8px !important;
+                align-items: flex-start !important;
+            }
+            body.nivel-2 .column {
+                width: calc((100vw - 48px) / 2) !important;
+            }
+            body.nivel-2 .column h2 {
+                font-size: clamp(20px, 6.2vw, 26px) !important;
+                letter-spacing: 1px !important;
+                margin-bottom: 8px !important;
+            }
+            body.nivel-2 .grid-botones {
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+            }
+            body.nivel-2 .btn-q,
+            body.nivel-2 .btn-a {
+                height: clamp(54px, 10.4vw, 66px) !important;
+                font-size: clamp(20px, 5.3vw, 25px) !important;
+                border-radius: 14px !important;
+            }
+            body.nivel-2 .linea-divisoria {
+                width: 3px !important;
+                min-height: 560px !important;
+                flex: 0 0 3px !important;
+            }
+        }
+        @media (max-height: 650px) and (orientation: landscape) {
+            body.nivel-2 {
+                background-position: center 44px, center center !important;
+                background-size: min(1050px, 96vw) auto, cover !important;
+                overflow: hidden !important;
+            }
+            body.nivel-2 #btn-menu-controles {
+                width: 44px !important;
+                height: 44px !important;
+                top: 8px !important;
+                left: 8px !important;
+                font-size: 24px !important;
+            }
+            body.nivel-2 #panel-lateral {
+                top: 8px !important;
+                right: 8px !important;
+                width: min(220px, 27vw) !important;
+            }
+            body.nivel-2 #marcador-puntos {
+                padding: 6px 10px !important;
+                font-size: clamp(15px, 2vw, 18px) !important;
+                border-radius: 13px !important;
+            }
+            body.nivel-2 #jugador-actual {
+                font-size: 12px !important;
+                margin-bottom: 2px !important;
+            }
+            body.nivel-2 .titulo-nivel2 {
+                display: none !important;
+            }
+            body.nivel-2 .wrapper {
+                margin-top: 80px !important;
+                width: min(1040px, 82vw) !important;
+                max-width: calc(100vw - 260px) !important;
+            }
+            body.nivel-2 .container {
+                gap: clamp(42px, 4.5vw, 70px) !important;
+            }
+            body.nivel-2 .column {
+                width: min(420px, 31vw) !important;
+            }
+            body.nivel-2 .column h2 {
+                font-size: clamp(24px, 4vw, 34px) !important;
+                margin-bottom: 6px !important;
+            }
+            body.nivel-2 .grid-botones {
+                grid-template-columns: repeat(2, minmax(108px, 1fr)) !important;
+                gap: 7px !important;
+            }
+            body.nivel-2 .btn-q,
+            body.nivel-2 .btn-a {
+                height: clamp(43px, 7.4vh, 57px) !important;
+                font-size: clamp(18px, 2.6vw, 23px) !important;
+                border-radius: 14px !important;
+            }
+            body.nivel-2 .linea-divisoria {
+                min-height: 330px !important;
+            }
+        }
 
     </style>
 </head>
@@ -513,14 +674,14 @@
     <script>
         const FIREBASE_API_KEY = "AIzaSyAlny3Yw6K_NFpr9i_-bbcuM6k9FAAHCME";
         const FIREBASE_PROJECT_ID = "juego-matematico-a076a";
-        function nivelRankingActualSeguroV31() {
+        function nivelRankingActualSeguroV32() {
             try {
-                const progreso = JSON.parse(localStorage.getItem('progresoMatematicoV31') || '{}');
+                const progreso = JSON.parse(localStorage.getItem('progresoMatematicoV32') || '{}');
                 const nivel = localStorage.getItem('nivelMatematico') || '1';
                 return (nivel === '2' && progreso.nivel1Completado) ? '2' : '1';
             } catch(e) { return '1'; }
         }
-        const NIVEL_RANKING_ACTUAL = nivelRankingActualSeguroV31();
+        const NIVEL_RANKING_ACTUAL = nivelRankingActualSeguroV32();
         const FIREBASE_COLLECTION = 'puntajes_total';
         const FIREBASE_BASE_URL = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/${FIREBASE_COLLECTION}`;
         function partidaAFirestore(partida) { return { fields: { nombre: { stringValue: String(partida.nombre || "Jugador").trim().slice(0, 30) }, puntos: { integerValue: String(Number(partida.puntos) || 0) }, duracion: { stringValue: String(partida.duracion || "0m 0s") }, segundos: { integerValue: String(Number(partida.segundos) || 0) }, fecha: { stringValue: String(partida.fecha || new Date().toLocaleDateString()) }, timestamp: { integerValue: String(Number(partida.timestamp) || Date.now()) } } }; }
@@ -636,9 +797,9 @@
         // =========================================================
         // V29 - PROGRESO ENTRE NIVELES
         // =========================================================
-        const PROGRESO_KEY_V31 = 'progresoMatematicoV31';
+        const PROGRESO_KEY_V32 = 'progresoMatematicoV32';
         function obtenerProgresoJuego() {
-            try { return Object.assign({ nivel1Completado:false, nivel2Completado:false, ultimaActualizacion:null }, JSON.parse(localStorage.getItem(PROGRESO_KEY_V31) || '{}')); }
+            try { return Object.assign({ nivel1Completado:false, nivel2Completado:false, ultimaActualizacion:null }, JSON.parse(localStorage.getItem(PROGRESO_KEY_V32) || '{}')); }
             catch(e) { return { nivel1Completado:false, nivel2Completado:false, ultimaActualizacion:null }; }
         }
         function guardarProgresoJuego(nivel, datos = {}) {
@@ -661,13 +822,13 @@
             progreso.duracionTotal = `${minTotal}m ${segTotal}s`;
             progreso.ultimaActualizacion = new Date().toISOString();
             progreso.ultimaPartida = datosLimpios;
-            localStorage.setItem(PROGRESO_KEY_V31, JSON.stringify(progreso));
+            localStorage.setItem(PROGRESO_KEY_V32, JSON.stringify(progreso));
             return progreso;
         }
-        const progresoInicialV31 = obtenerProgresoJuego();
-        const nivelGuardadoV31 = localStorage.getItem('nivelMatematico') || '1';
-        const nivelSeleccionado = (nivelGuardadoV31 === '2' && progresoInicialV31.nivel1Completado) ? '2' : '1';
-        if (nivelSeleccionado !== nivelGuardadoV31) localStorage.setItem('nivelMatematico', nivelSeleccionado);
+        const progresoInicialV32 = obtenerProgresoJuego();
+        const nivelGuardadoV32 = localStorage.getItem('nivelMatematico') || '1';
+        const nivelSeleccionado = (nivelGuardadoV32 === '2' && progresoInicialV32.nivel1Completado) ? '2' : '1';
+        if (nivelSeleccionado !== nivelGuardadoV32) localStorage.setItem('nivelMatematico', nivelSeleccionado);
         document.body.classList.add(nivelSeleccionado === '2' ? 'nivel-2' : 'nivel-1');
         function claveHistorialActual() { return nivelSeleccionado === '2' ? 'historialMatematico_nivel2' : 'historialMatematico'; }
         function etiquetaNivelActual() { return nivelSeleccionado === '2' ? 'Nivel 2' : 'Nivel 1'; }
@@ -918,28 +1079,61 @@
         }
 
         function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
-        
-        const preg = shuffle([...pares]);
-        const resp = shuffle([...pares]);
-
+        let loteActualNivel2 = 0;
+        let aciertosLoteNivel2 = 0;
+        let paresVisibles = pares;
+        const lotesNivel2 = nivelSeleccionado === '2' ? [pares.slice(0, 10), pares.slice(10, 20)] : [pares];
         const colPreguntas = document.getElementById('col-preguntas');
-        preg.forEach(p => {
+        const colRespuestas = document.getElementById('col-respuestas');
+        function crearBotonPregunta(p) {
             const btn = document.createElement('button');
-            btn.className = 'btn-q'; btn.innerHTML = p.q; btn.dataset.id = p.id;
+            btn.className = 'btn-q';
+            btn.innerHTML = p.q;
+            btn.dataset.id = p.id;
             btn.addEventListener('mousedown', (e) => iniciarArrastre(btn, p.id, e.clientX, e.clientY));
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
-                const t = e.touches[0]; iniciarArrastre(btn, p.id, t.clientX, t.clientY);
+                const t = e.touches[0];
+                iniciarArrastre(btn, p.id, t.clientX, t.clientY);
             }, {passive: false});
-            colPreguntas.appendChild(btn);
-        });
-        
-        const colRespuestas = document.getElementById('col-respuestas');
-        resp.forEach(r => {
+            return btn;
+        }
+        function crearBotonRespuesta(r) {
             const btn = document.createElement('button');
-            btn.className = 'btn-a'; btn.innerText = r.a; btn.dataset.id = r.id; 
-            colRespuestas.appendChild(btn);
-        });
+            btn.className = 'btn-a';
+            btn.innerText = r.a;
+            btn.dataset.id = r.id;
+            return btn;
+        }
+        function renderizarLoteNivel2(indice = 0) {
+            if (nivelSeleccionado !== '2') return;
+            loteActualNivel2 = indice;
+            aciertosLoteNivel2 = 0;
+            paresVisibles = lotesNivel2[loteActualNivel2] || [];
+            colPreguntas.innerHTML = '';
+            colRespuestas.innerHTML = '';
+            seleccionadoId = null;
+            botonPreguntaActivo = null;
+            estaArrastrando = false;
+            if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+            shuffle([...paresVisibles]).forEach(p => colPreguntas.appendChild(crearBotonPregunta(p)));
+            shuffle([...paresVisibles]).forEach(r => colRespuestas.appendChild(crearBotonRespuesta(r)));
+            if (typeof aplicarEstiloPremiumBotonesV24 === 'function') aplicarEstiloPremiumBotonesV24();
+        }
+        function cargarSiguienteLoteNivel2() {
+            if (nivelSeleccionado !== '2') return;
+            if (loteActualNivel2 + 1 < lotesNivel2.length) {
+                renderizarLoteNivel2(loteActualNivel2 + 1);
+            }
+        }
+        if (nivelSeleccionado === '2') {
+            renderizarLoteNivel2(0);
+        } else {
+            const preg = shuffle([...pares]);
+            const resp = shuffle([...pares]);
+            preg.forEach(p => colPreguntas.appendChild(crearBotonPregunta(p)));
+            resp.forEach(r => colRespuestas.appendChild(crearBotonRespuesta(r)));
+        }
 
         window.addEventListener('mousemove', (e) => moverArrastre(e.clientX, e.clientY));
         window.addEventListener('touchmove', (e) => {
@@ -995,6 +1189,7 @@
                 let puntosGanados = parejaSeleccionada.bonus ? 30 : 10;
                 totalPuntos += puntosGanados;
                 aciertosContador++;
+                if (nivelSeleccionado === '2') aciertosLoteNivel2++;
                 document.getElementById('puntos').innerText = totalPuntos;
 
                 m.style.backgroundImage = "url('im/pngwing.com.png')"; 
@@ -1009,6 +1204,9 @@
                 elResp.style.display = 'none';
                 seleccionadoId = null; botonPreguntaActivo = null;
 
+                if (nivelSeleccionado === '2' && aciertosLoteNivel2 >= paresVisibles.length && aciertosContador < totalParejas) {
+                    setTimeout(cargarSiguienteLoteNivel2, 650);
+                }
                 if (aciertosContador === totalParejas) { setTimeout(activarPantallaVictoria, 1000); }
             } else {
                 let puntosPerdidos = (parejaSeleccionada && parejaSeleccionada.bonus) ? 15 : 5;
@@ -1131,7 +1329,7 @@
     </div>
 
 
-    <!-- PARCHE FINAL V31: total acumulado, penalizacion de tiempo y ranking global total -->
+    <!-- PARCHE FINAL V32: mobile optimizado, lotes de 10 y ranking global total -->
     <script>
         window.__partidaGuardadaV16 = false;
         window.__juegoTerminadoV16 = false;
@@ -1216,7 +1414,7 @@
     </div>
 
 
-    <!-- PARCHE V31: Nivel 1 tipografia limpia + Nivel 2 estable + total acumulado -->
+    <!-- PARCHE V32: Nivel 2 mobile en lotes + total acumulado -->
     <script>
         const FIREBASE_API_KEY_V24="AIzaSyAlny3Yw6K_NFpr9i_-bbcuM6k9FAAHCME";
         function firebaseBaseUrlV31(){ return `https://firestore.googleapis.com/v1/projects/juego-matematico-a076a/databases/(default)/documents/puntajes_total`; }
@@ -1235,7 +1433,7 @@
 
     <script>
         // =========================================================
-        // V31 - FINAL POR NIVEL, PENALIZACION, TOTAL Y RANKING GLOBAL
+        // V32 - FINAL POR NIVEL, PENALIZACION, TOTAL Y RANKING GLOBAL
         // =========================================================
         const TIEMPO_LIMITE_NIVEL_V31 = 150; // 2.5 minutos
         const PENALIZACION_TIEMPO_V31 = 2;
